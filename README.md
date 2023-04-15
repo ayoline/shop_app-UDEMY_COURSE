@@ -6,10 +6,12 @@
 
 <table>
     <tr>
-       <td></td>
+       <td>intl</td>
+       <td>provider</td>
     </tr>
     <tr>
-        <td></td>
+        <td>^0.18.0</td>
+        <td>^6.0.5</td>
     </tr>
 </table>
 
