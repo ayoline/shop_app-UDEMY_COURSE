@@ -12,12 +12,29 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
+  final _imageURLController = TextEditingController();
+  final _imageURLFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    _imageURLController.addListener(_updateImageURL);
+    super.initState();
+  }
 
   @override
   void dispose() {
+    _imageURLController.removeListener(_updateImageURL);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
+    _imageURLController.dispose();
+    _imageURLFocusNode.dispose();
     super.dispose();
+  }
+
+  void _updateImageURL() {
+    if (!_imageURLFocusNode.hasFocus) {
+      setState(() {});
+    }
   }
 
   @override
@@ -53,6 +70,45 @@ class _EditProductScreenState extends State<EditProductScreen> {
               keyboardType: TextInputType.multiline,
               focusNode: _descriptionFocusNode,
             ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  margin: const EdgeInsets.only(
+                    top: 8,
+                    right: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: _imageURLController.text.isEmpty
+                      ? const Text('Enter a URL')
+                      : FittedBox(
+                          child: Image.network(
+                            _imageURLController.text,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    decoration: const InputDecoration(labelText: 'Image URL'),
+                    keyboardType: TextInputType.url,
+                    textInputAction: TextInputAction.done,
+                    controller: _imageURLController,
+                    focusNode: _imageURLFocusNode,
+                    onEditingComplete: () {
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ],
+            )
           ],
         )),
       ),
